@@ -54,10 +54,11 @@ class DCImageBuilder(Stack):
                     ),
                 }
             )
+        name = validate_name(f"DCBaseImage_ubuntu_{version}")
         return image_builder.CfnImageRecipe(
             self,
-            "DCBaseImage",
-            name="DCBaseImage",
+            name,
+            name=name,
             version="0.0.1",
             components=components_list,
             parent_image=base_ami,
