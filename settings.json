@@ -1,0 +1,10 @@
+{
+  "supported_ubuntu_versions": {
+    "22.04": {
+      "base_ami": "ami-0f540e9f488cfa27d",
+      "components": {
+        "install_python3":  "install_python3.yml"
+      }
+    }
+  }
+}
