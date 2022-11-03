@@ -38,6 +38,9 @@ jobs:
       - run:
           name: Black
           command: pipenv run black-check
+      - run:
+          name: iSort
+          command: pipenv run isort-check
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
