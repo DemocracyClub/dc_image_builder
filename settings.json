@@ -2,9 +2,29 @@
   "supported_ubuntu_versions": {
     "22.04": {
       "base_ami": "ami-0f540e9f488cfa27d",
-      "components": {
-        "install_python3":  "install_python3.yml"
-      }
+      "recipe_version": "0.0.4",
+      "components": [
+        {
+          "name": "ubuntu_upgrades",
+          "file": "ubuntu_upgrades.yml"
+        },
+        {
+          "name": "install_apt_packages",
+          "file": "install_apt_packages.yml"
+        },
+        {
+          "name": "install_python3",
+          "file": "install_python3.yml"
+        },
+        {
+          "name": "amazon-cloudwatch-agent-linux",
+          "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/amazon-cloudwatch-agent-linux/x.x.x"
+        },
+        {
+          "name": "aws-cli-version-2-linux",
+          "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/aws-cli-version-2-linux/x.x.x"
+        }
+      ]
     }
   }
 }

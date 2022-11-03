@@ -6,10 +6,12 @@ name = "pypi"
 [packages]
 "aws-cdk.core" = "*"
 "aws-cdk.aws-imagebuilder" = "*"
+pyyaml = "*"
 
 [dev-packages]
 black = "*"
 ipdb = "*"
+isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 
 [requires]
 python_version = "3.10"

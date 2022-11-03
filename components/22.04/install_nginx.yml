@@ -1,0 +1,18 @@
+name: InstallNginx
+description: Install nginx
+schemaVersion: 1.0
+component_version: 0.0.3
+
+phases:
+  - name: build
+    steps:
+      - name: InstallNginx
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo apt install nginx
+      - name: RemoveDefaultNginxConfig
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo rm /etc/nginx/sites-enabled/default

@@ -2,14 +2,18 @@ import json
 import re
 from pathlib import Path
 
-from aws_cdk.core import Stack, Construct
-import aws_cdk.aws_imagebuilder as image_builder
 import aws_cdk.aws_iam as iam
+import aws_cdk.aws_imagebuilder as image_builder
+import yaml
+from aws_cdk.aws_ssm import StringParameter
+from aws_cdk.core import Construct, Stack
 
 
 def validate_name(name):
     name = name.replace(".", "-")
-    if not re.match(r"^[-_A-Za-z-0-9][-_A-Za-z0-9 ]{1,126}[-_A-Za-z-0-9]$", name):
+    if not re.match(
+        r"^[-_A-Za-z-0-9][-_A-Za-z0-9 ]{1,126}[-_A-Za-z-0-9]$", name
+    ):
         raise ValueError(f"{name} isn't valid")
     return name
 
@@ -20,22 +24,28 @@ class DCImageBuilder(Stack):
 
         settings = self.load_settings()
 
-        # Make the instance profile
-        instance_profile = self.make_instance_profile()
-
-        # Make the infrastructure configuration
-        infra_config = self.make_infra_config(instance_profile)
+        # Make the infrastructure configuration (the type of instance
+        # that will build the image)
+        infra_config = self.make_infra_config()
 
         # Make the recipes and images
-        for version, image_data in settings["supported_ubuntu_versions"].items():
+        for version, image_data in settings[
+            "supported_ubuntu_versions"
+        ].items():
             recipe = self.make_recipe(version, image_data)
 
+            distribution = self.make_distribution(version, image_data)
             pipeline = image_builder.CfnImagePipeline(
                 self,
                 validate_name(f"Ubuntu_{version}_Pipeline"),
                 name=validate_name(f"ubuntu_{version}"),
                 image_recipe_arn=recipe.attr_arn,
                 infrastructure_configuration_arn=infra_config.attr_arn,
+                distribution_configuration_arn=distribution.attr_arn,
+                schedule=image_builder.CfnImagePipeline.ScheduleProperty(
+                    pipeline_execution_start_condition="EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE",
+                    schedule_expression="rate(1 day)",
+                ),
             )
             pipeline.add_depends_on(infra_config)
 
@@ -46,12 +56,10 @@ class DCImageBuilder(Stack):
     def make_recipe(self, version, image_data):
         base_ami = image_data["base_ami"]
         components_list = []
-        for component_name, component_file in image_data["components"].items():
+        for component in image_data["components"]:
             components_list.append(
                 {
-                    "componentArn": self.make_component(
-                        version, component_name, component_file
-                    ),
+                    "componentArn": self.make_component(version, component),
                 }
             )
         name = validate_name(f"DCBaseImage_ubuntu_{version}")
@@ -59,21 +67,30 @@ class DCImageBuilder(Stack):
             self,
             name,
             name=name,
-            version="0.0.1",
+            version=image_data["recipe_version"],
             components=components_list,
             parent_image=base_ami,
         )
 
-    def make_component(self, version, name, file):
-        component_path = Path() / "components" / version / file
-        name = f"{name}_{version}".replace(".", "-").replace(" ", "-")
+    def make_component(self, version, component):
+
+        if component.get("arn"):
+            return component.get("arn")
+
+        component_path = Path() / "components" / version / component.get("file")
+        component_yaml = yaml.safe_load(component_path.read_text())
+
+        name = f"{component['name']}_{version}".replace(".", "-").replace(
+            " ", "-"
+        )
+
         component = image_builder.CfnComponent(
             self,
-            name,
+            component["name"],
             name=name,
             platform="Linux",
-            version="0.0.1",
-            data=component_path.read_text(),
+            version=component_yaml.pop("component_version"),
+            data=yaml.dump(component_yaml),
         )
         return component.attr_arn
 
@@ -104,7 +121,21 @@ class DCImageBuilder(Stack):
         )
         return instanceprofile
 
-    def make_infra_config(self, instance_profile):
+    def make_infra_config(self) -> image_builder.CfnInfrastructureConfiguration:
+        """
+        https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-infra-config.html
+
+        Infrastructure configurations specify the Amazon EC2 infrastructure
+        that Image Builder uses to build and test your EC2 Image Builder image
+
+        :param instance_profile:
+        :return:
+        """
+
+        # Make the profile that will be used by the image builder for this
+        # instance
+        instance_profile = self.make_instance_profile()
+
         infraconfig = image_builder.CfnInfrastructureConfiguration(
             self,
             "DCBaseImageInfraConfig",
@@ -113,6 +144,29 @@ class DCImageBuilder(Stack):
             instance_profile_name="DCBaseImageInstanceProfile",
         )
 
-        # infrastructure need to wait for instance profile to complete before beginning deployment.
+        # infrastructure need to wait for instance profile
+        # to complete before beginning deployment.
         infraconfig.add_depends_on(instance_profile)
         return infraconfig
+
+    def make_distribution(self, version, image_data):
+        org_id = StringParameter.value_for_string_parameter(
+            self, "OrganisationID"
+        )
+        dist_name = validate_name(f"Ubuntu-{version}-distribution")
+        return image_builder.CfnDistributionConfiguration(
+            self,
+            dist_name,
+            name=dist_name,
+            distributions=[
+                image_builder.CfnDistributionConfiguration.DistributionProperty(
+                    region="eu-west-2",
+                    ami_distribution_configuration=image_builder.CfnDistributionConfiguration.AmiDistributionConfigurationProperty(
+                        ami_tags={"ubuntu_version": version},
+                        launch_permission_configuration=image_builder.CfnDistributionConfiguration.LaunchPermissionConfigurationProperty(
+                            organization_arns=[org_id]
+                        ),
+                    ),
+                )
+            ],
+        )
