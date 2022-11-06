@@ -54,3 +54,12 @@ coupled to the version semver.
    change to the recipe)
 4. Commit with a useful explanation of the change(s) made
 5. Push, and CI/CD should take care of the deployment 
+
+
+
+# CI / CD / Deployment
+
+This project uses CircleCI to:
+
+1. Lint and check the code on all commits
+2. Run `cdk synth` on commits
