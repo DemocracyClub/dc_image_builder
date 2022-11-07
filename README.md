@@ -56,10 +56,65 @@ coupled to the version semver.
 5. Push, and CI/CD should take care of the deployment 
 
 
-
 # CI / CD / Deployment
 
 This project uses CircleCI to:
 
 1. Lint and check the code on all commits
 2. Run `cdk synth` on commits
+3. Run `cdk deploy` on commits to the `main` branch
+
+`cdk synth` requires a valid AWS account in order to run. There is an [open 
+feature request](https://github.com/aws/aws-cdk/issues/17066) about this.
+
+## IAM permissions
+
+CDK needs to be bootstrapped in a new account before it can run.
+
+To do this, run `cdk bootstrap` with your privileged developer or admin
+account on the AWS account you're settings up. This is a one-time operation,
+so only needed if you're setting up a new deployment.
+
+After the bootstrap, CDK needs AWS credentials that have the following:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/cdk-*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ssm:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+**WARNING**: The CDK roles have the `AdministratorAccess` policy attached.
+This means that CDK has full admin to the AWS account. Don't use the
+CDK user credentials anywhere that shouldn't have full admin access.
