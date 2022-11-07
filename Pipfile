@@ -7,6 +7,10 @@ name = "pypi"
 "aws-cdk.core" = "*"
 "aws-cdk.aws-imagebuilder" = "*"
 pyyaml = "*"
+"aws-cdk.aws-lambda" = "*"
+"aws-cdk.aws-lambda-python" = "*"
+"aws-cdk.aws-events" = "*"
+"aws-cdk.aws-events-targets" = "*"
 
 [dev-packages]
 black = "*"
