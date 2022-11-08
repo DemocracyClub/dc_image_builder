@@ -2,6 +2,7 @@ import json
 from dataclasses import dataclass
 
 import requests
+import semver
 from github import open_pull_request
 
 
@@ -57,6 +58,12 @@ def get_latest_image_for_version(
     raise ValueError(f"No image found for {version=}, {region=}, {arch=}")
 
 
+def bump_recipe_version(version):
+    ver = semver.VersionInfo.parse(version)
+    ver.bump_patch()
+    return str(ver)
+
+
 def handler(event, context):
     settings: dict = get_current_settings()
     ami_data = get_ami_image_data()
@@ -65,9 +72,12 @@ def handler(event, context):
         if latest_image.ami_id != image_data["base_ami"]:
             # We have ourselves a new image
             new_settings = settings.copy()
-            new_settings["supported_ubuntu_versions"][version][
-                "base_ami"
-            ] = latest_image.ami_id
+            version_data = new_settings["supported_ubuntu_versions"][version]
+            version_data["base_ami"] = latest_image.ami_id
+            version_data["recipe_version"] = bump_recipe_version(
+                version_data["recipe_version"]
+            )
+            new_settings["supported_ubuntu_versions"][version] = version_data
             open_pull_request(version, new_settings)
 
 
