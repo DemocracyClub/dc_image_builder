@@ -26,7 +26,7 @@
         },
         {
           "name": "amazon-codedeploy-agent-linux",
-          "arn": "arn:aws:imagebuilder:eu-west-1:aws:component/aws-codedeploy-agent-linux/x.x.x"
+          "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/aws-codedeploy-agent-linux/x.x.x"
         }
       ]
     }
