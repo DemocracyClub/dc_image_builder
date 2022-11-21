@@ -2,7 +2,7 @@
   "supported_ubuntu_versions": {
     "22.04": {
       "base_ami": "ami-08faca8d0701614ab",
-      "recipe_version": "0.0.8",
+      "recipe_version": "0.0.9",
       "components": [
         {
           "name": "ubuntu_upgrades",
