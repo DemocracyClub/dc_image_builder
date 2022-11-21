@@ -26,7 +26,7 @@
         },
         {
           "name": "amazon-codedeploy-agent-linux",
-          "arn": "install_codedeploy_agent.yml"
+          "file": "install_codedeploy_agent.yml"
         }
       ]
     }
