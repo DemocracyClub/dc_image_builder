@@ -56,6 +56,14 @@ coupled to the version semver.
 5. Push, and CI/CD should take care of the deployment 
 
 
+### Adding an existing component
+
+1. If you can find your component in this [list](https://eu-west-2.console.aws.amazon.com/imagebuilder/home?region=eu-west-2#/components
+) of aws managed components jump to step 3.
+2. Create a file describing the steps for your component in `components/[image_version]/`
+3. Add an entry in `settings.json`. This list is the order in which components will be executed, so take this into account.
+4. Update the `recipe_version` value.
+
 # CI / CD / Deployment
 
 This project uses CircleCI to:
