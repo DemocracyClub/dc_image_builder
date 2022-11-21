@@ -1,7 +1,7 @@
 name: InstallCodedeployAgent
 description: Installs AWS CodedeployAgent
 schemaVersion: 1.0
-component_version: 0.0.4
+component_version: 0.0.5
 
 phases:
   - name: build
