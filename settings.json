@@ -2,7 +2,7 @@
   "supported_ubuntu_versions": {
     "22.04": {
       "base_ami": "ami-08faca8d0701614ab",
-      "recipe_version": "0.0.5",
+      "recipe_version": "0.0.6",
       "components": [
         {
           "name": "ubuntu_upgrades",
@@ -23,6 +23,10 @@
         {
           "name": "aws-cli-version-2-linux",
           "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/aws-cli-version-2-linux/x.x.x"
+        },
+        {
+          "name": "amazon-codedeploy-agent-linux",
+          "arn": "arn:aws:imagebuilder:eu-west-1:aws:component/aws-codedeploy-agent-linux/x.x.x"
         }
       ]
     }
