@@ -2,7 +2,7 @@
   "supported_ubuntu_versions": {
     "22.04": {
       "base_ami": "ami-08faca8d0701614ab",
-      "recipe_version": "0.0.7",
+      "recipe_version": "0.0.8",
       "components": [
         {
           "name": "ubuntu_upgrades",
@@ -26,7 +26,7 @@
         },
         {
           "name": "amazon-codedeploy-agent-linux",
-          "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/aws-codedeploy-agent-linux/x.x.x"
+          "arn": "install_codedeploy_agent.yml"
         }
       ]
     }
