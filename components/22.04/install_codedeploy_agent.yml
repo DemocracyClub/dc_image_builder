@@ -1,7 +1,7 @@
 name: InstallCodedeployAgent
 description: Installs AWS CodedeployAgent
 schemaVersion: 1.0
-component_version: 0.0.2
+component_version: 0.0.3
 
 phases:
   - name: build
@@ -17,12 +17,13 @@ phases:
           commands:
             - cd /tmp
             - wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/releases/codedeploy-agent_1.3.2-1902_all.deb
-            - mkdir codedeploy-agent_1.3.2-1902_ubuntu22
-            - dpkg-deb -R codedeploy-agent_1.3.2-1902_all.deb codedeploy-agent_1.3.2-1902_ubuntu22
-            - sed 's/Depends:.*/Depends:ruby3.0/' -i ./codedeploy-agent_1.3.2-1902_ubuntu22/DEBIAN/control
-            - dpkg-deb -b codedeploy-agent_1.3.2-1902_ubuntu22/
-            - sudo dpkg -i codedeploy-agent_1.3.2-1902_ubuntu22.deb
-
+            - VERSION=$(aws s3 ls s3://aws-codedeploy-eu-west-2/releases/ | grep deb | sort --reverse | head -n 1 | cut -c 49-58)
+            - wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/releases/codedeploy-agent_"$VERSION"_all.deb
+            - mkdir codedeploy-agent_"$VERSION"_ubuntu22
+            - dpkg-deb -R codedeploy-agent_"$VERSION"_all.deb codedeploy-agent_"$VERSION"_ubuntu22
+            - sed 's/Depends:.*/Depends:ruby3.0/' -i ./codedeploy-agent_"$VERSION"_ubuntu22/DEBIAN/control
+            - dpkg-deb -b codedeploy-agent_"$VERSION"_ubuntu22/
+            - sudo dpkg -i codedeploy-agent_"$VERSION"_ubuntu22.deb
 
   - name: test
     steps:
