@@ -4,19 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"aws-cdk.core" = "*"
-"aws-cdk.aws-imagebuilder" = "*"
-pyyaml = "*"
-"aws-cdk.aws-lambda" = "*"
-"aws-cdk.aws-lambda-python" = "*"
-"aws-cdk.aws-events" = "*"
-"aws-cdk.aws-events-targets" = "*"
-"aws-cdk.aws-sns" = "*"
+"aws-cdk.core" = "1.181.1"
+"aws-cdk.aws-imagebuilder" = "1.181.1"
+pyyaml = "6.0"
+"aws-cdk.aws-lambda" = "1.181.1"
+"aws-cdk.aws-lambda-python" = "1.181.1"
+"aws-cdk.aws-events" = "1.181.1"
+"aws-cdk.aws-events-targets" = "1.181.1"
+"aws-cdk.aws-sns" = "1.181.1"
 
 [dev-packages]
-black = "*"
-ipdb = "*"
-isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
+black = "22.10.0"
+ipdb = "0.13.9"
+isort = {extras = ["pipfile_deprecated_finder"], version = "5.10.1"}
 
 [requires]
 python_version = "3.10"
