@@ -6,7 +6,8 @@ import aws_cdk.aws_iam as iam
 import aws_cdk.aws_imagebuilder as image_builder
 import yaml
 from aws_cdk.aws_ssm import StringParameter
-from aws_cdk.core import Construct, Stack
+from aws_cdk.core import Construct, Stack, CfnOutput
+import aws_cdk.aws_sns as sns
 
 
 def validate_name(name):
@@ -136,18 +137,32 @@ class DCImageBuilder(Stack):
         # instance
         instance_profile = self.make_instance_profile()
 
+        topic = sns.Topic(
+            self,
+            "dc-wide-image-builds",
+            display_name="DC Wide Image Builds",
+            topic_name="dc-wide-image-builds"
+        )
+        self._topic_arn = topic.topic_arn
+
+
         infraconfig = image_builder.CfnInfrastructureConfiguration(
             self,
             "DCBaseImageInfraConfig",
             name="DCBaseImageInfraConfig",
             instance_types=["t3.xlarge"],
             instance_profile_name="DCBaseImageInstanceProfile",
+            sns_topic_arn=topic.topic_arn
         )
 
         # infrastructure need to wait for instance profile
         # to complete before beginning deployment.
         infraconfig.add_depends_on(instance_profile)
         return infraconfig
+
+    @property
+    def topic_arn(self):
+        return self._topic_arn
 
     def make_distribution(self, version, image_data):
         org_id = StringParameter.value_for_string_parameter(
@@ -164,7 +179,7 @@ class DCImageBuilder(Stack):
                     ami_distribution_configuration=image_builder.CfnDistributionConfiguration.AmiDistributionConfigurationProperty(
                         ami_tags={"ubuntu_version": version},
                         launch_permission_configuration=image_builder.CfnDistributionConfiguration.LaunchPermissionConfigurationProperty(
-                            organization_arns=[org_id]
+                            organization_arns=[org_id],
                         ),
                     ),
                 )
