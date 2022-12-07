@@ -4,10 +4,10 @@ from pathlib import Path
 
 import aws_cdk.aws_iam as iam
 import aws_cdk.aws_imagebuilder as image_builder
+import aws_cdk.aws_sns as sns
 import yaml
 from aws_cdk.aws_ssm import StringParameter
-from aws_cdk.core import Construct, Stack, CfnOutput
-import aws_cdk.aws_sns as sns
+from aws_cdk.core import CfnOutput, Construct, Stack
 
 
 def validate_name(name):
@@ -141,10 +141,9 @@ class DCImageBuilder(Stack):
             self,
             "dc-wide-image-builds",
             display_name="DC Wide Image Builds",
-            topic_name="dc-wide-image-builds"
+            topic_name="dc-wide-image-builds",
         )
         self._topic_arn = topic.topic_arn
-
 
         infraconfig = image_builder.CfnInfrastructureConfiguration(
             self,
@@ -152,7 +151,7 @@ class DCImageBuilder(Stack):
             name="DCBaseImageInfraConfig",
             instance_types=["t3.xlarge"],
             instance_profile_name="DCBaseImageInstanceProfile",
-            sns_topic_arn=topic.topic_arn
+            sns_topic_arn=topic.topic_arn,
         )
 
         # infrastructure need to wait for instance profile

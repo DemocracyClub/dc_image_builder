@@ -1,3 +1,4 @@
+import aws_cdk.aws_sns as sns
 from aws_cdk import (
     aws_events,
     aws_events_targets,
@@ -7,12 +8,13 @@ from aws_cdk import (
 )
 from aws_cdk.aws_ssm import StringParameter
 from aws_cdk.core import Construct, Stack
-import aws_cdk.aws_sns as sns
 from isort.core import IMPORT_START_IDENTIFIERS
 
 
 class NewDCImageActions(Stack):
-    def __init__(self, scope: Construct, construct_id: str, topic_arn, **kwargs) -> None:
+    def __init__(
+        self, scope: Construct, construct_id: str, topic_arn, **kwargs
+    ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         GITHUB_USERNAME = StringParameter.value_for_string_parameter(
@@ -45,7 +47,9 @@ class NewDCImageActions(Stack):
         sns.Subscription(
             self,
             "listen_for_base_images",
-            topic=sns.Topic.from_topic_arn(self, topic_arn=topic_arn, id="topic_arn"),
+            topic=sns.Topic.from_topic_arn(
+                self, topic_arn=topic_arn, id="topic_arn"
+            ),
             endpoint=new_dc_base_ami_actions.function_arn,
             protocol=sns.SubscriptionProtocol.LAMBDA,
         )
