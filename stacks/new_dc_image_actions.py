@@ -41,7 +41,7 @@ class NewDCImageActions(Stack):
             timeout=core.Duration.minutes(2),
         )
         event_lambda_target = aws_events_targets.LambdaFunction(
-            handler=new_dc_base_ami_actions
+            handler=new_dc_base_ami_actions,
         )
 
         sns.Subscription(
