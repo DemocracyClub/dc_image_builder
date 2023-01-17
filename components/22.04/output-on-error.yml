@@ -11,8 +11,8 @@ phases:
         inputs:
           - path: /usr/local/bin/output-on-error
             permissions: 755
-            owner: "{{ username }}"
-            group: "{{ username }}"
+            owner: root
+            group: root
             content: |
               #!/bin/sh
               # This useful wrapper will call the command you pass it, but suppress
