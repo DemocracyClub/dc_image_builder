@@ -1,7 +1,7 @@
 {
   "supported_ubuntu_versions": {
     "22.04": {
-      "base_ami": "ami-09627c82937ccdd6d",
+      "base_ami": "ami-0eb5c35d7b89f3488",
       "recipe_version": "0.0.14",
       "components": [
         {
