@@ -2,34 +2,68 @@
   "supported_ubuntu_versions": {
     "22.04": {
       "base_ami": "ami-01dcd7d526188b94f",
-      "recipe_version": "0.0.14",
+      "recipe_version": "0.0.15",
       "components": [
         {
-          "name": "ubuntu_upgrades",
+          "name": "ubuntu_upgrades_22",
           "file": "ubuntu_upgrades.yml"
         },
         {
-          "name": "install_apt_packages",
+          "name": "install_apt_packages_22",
           "file": "install_apt_packages.yml"
         },
         {
-          "name": "install_python3",
+          "name": "install_python3_22",
           "file": "install_python3.yml"
         },
         {
-          "name": "install_output_on_error",
+          "name": "install_output_on_error_22",
           "file": "output-on-error.yml"
         },
         {
-          "name": "amazon-cloudwatch-agent-linux",
+          "name": "amazon-cloudwatch-agent-linux_22",
           "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/amazon-cloudwatch-agent-linux/x.x.x"
         },
         {
-          "name": "aws-cli-version-2-linux",
+          "name": "aws-cli-version-2-linux_22",
           "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/aws-cli-version-2-linux/x.x.x"
         },
         {
-          "name": "amazon-codedeploy-agent-linux",
+          "name": "amazon-codedeploy-agent-linux_22",
+          "file": "install_codedeploy_agent.yml"
+        }
+      ]
+    },
+    "24.04": {
+      "base_ami": "ami-0d85ba2efe654edaa",
+      "recipe_version": "0.0.2",
+      "components": [
+        {
+          "name": "ubuntu_upgrades_24",
+          "file": "ubuntu_upgrades.yml"
+        },
+        {
+          "name": "install_apt_packages_24",
+          "file": "install_apt_packages.yml"
+        },
+        {
+          "name": "install_python3_24",
+          "file": "install_python3.yml"
+        },
+        {
+          "name": "install_output_on_error_24",
+          "file": "output-on-error.yml"
+        },
+        {
+          "name": "amazon-cloudwatch-agent-linux_24",
+          "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/amazon-cloudwatch-agent-linux/x.x.x"
+        },
+        {
+          "name": "aws-cli-version-2-linux_24",
+          "arn": "arn:aws:imagebuilder:eu-west-2:aws:component/aws-cli-version-2-linux/x.x.x"
+        },
+        {
+          "name": "amazon-codedeploy-agent-linux_24",
           "file": "install_codedeploy_agent.yml"
         }
       ]
