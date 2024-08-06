@@ -126,3 +126,10 @@ After the bootstrap, CDK needs AWS credentials that have the following:
 **WARNING**: The CDK roles have the `AdministratorAccess` policy attached.
 This means that CDK has full admin to the AWS account. Don't use the
 CDK user credentials anywhere that shouldn't have full admin access.
+
+
+## Triggering a Build
+
+Once CircleCI has deployed a pipeline, a build is triggered in the AWS GUI.
+
+![](run-pipeline.png)
