@@ -1,0 +1,29 @@
+name: InstallCodedeployAgent
+description: Installs AWS CodedeployAgent
+schemaVersion: 1.0
+component_version: 0.0.1
+
+phases:
+  - name: build
+    steps:
+      - name: InstallAptPackages
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo apt install -y ruby-full ruby-webrick wget
+      - name: InstallDebPackage
+        action: ExecuteBash
+        inputs:
+          commands:
+            - cd /tmp
+            - wget https://aws-codedeploy-eu-west-2.s3.eu-west-2.amazonaws.com/latest/codedeploy-agent_all.deb
+            - sudo dpkg -i codedeploy-agent_all.deb
+
+  - name: test
+    steps:
+      - name: CheckCodedeployAgent
+        action: ExecuteBash
+        inputs:
+          commands:
+            - systemctl list-units --type=service | grep codedeploy
+            - sudo service codedeploy-agent status
