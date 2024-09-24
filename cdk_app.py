@@ -11,25 +11,19 @@ app = cdk.App()
 image_builder = DCImageBuilder(
     app,
     "DCBaseImageBuilder",
-    env=cdk.Environment(
-        account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="eu-west-2"
-    ),
+    env=cdk.Environment(account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="eu-west-2"),
 )
 
 DCBaseImageUpdater(
     app,
     "DCBaseImageUpdater",
-    env=cdk.Environment(
-        account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="eu-west-2"
-    ),
+    env=cdk.Environment(account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="eu-west-2"),
 )
 NewDCImageActions(
     app,
     "NewDCImageActions",
     topic_arn=image_builder.topic_arn,
-    env=cdk.Environment(
-        account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="eu-west-2"
-    ),
+    env=cdk.Environment(account=os.getenv("CDK_DEFAULT_ACCOUNT"), region="eu-west-2"),
 )
 
 app.synth()
