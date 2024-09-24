@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 "aws-cdk.core" = "1.204.0"
 "aws-cdk.aws-imagebuilder" = "1.204.0"
-pyyaml = "6.0"
+pyyaml = "==6.0.2"
 "aws-cdk.aws-lambda" = "1.204.0"
 "aws-cdk.aws-lambda-python" = "1.204.0"
 "aws-cdk.aws-events" = "1.204.0"
@@ -15,13 +15,10 @@ pyyaml = "6.0"
 certifi = "==2024.2.2"
 
 [dev-packages]
-black = "22.10.0"
 ipdb = "0.13.9"
-isort = {extras = ["pipfile_deprecated_finder"], version = "5.10.1"}
+ruff = "==0.6.7"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"
 
 [scripts]
-black-check = "black --check ."
-isort-check = "isort --check ."
