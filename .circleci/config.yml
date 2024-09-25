@@ -7,7 +7,7 @@ orbs:
 jobs:
   test:
     docker:
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.12-node
     steps:
       - checkout
       - restore_cache:
@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Install python dependencies
           command: |
-            pyenv local $(pyenv versions --bare | grep 3.10)
+            pyenv local $(pyenv versions --bare | grep 3.12)
             python -m venv .venv
             . .venv/bin/activate
             pip install --upgrade pip pipenv
@@ -36,14 +36,13 @@ jobs:
           key: v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "package.json" }}
 
       - run:
-          name: Black
-          command: pipenv run black-check
-      - run:
-          name: iSort
-          command: pipenv run isort-check
+          name: Ruff
+          command: |
+            pipenv run ruff check .
+            pipenv run ruff format --check .
   cdk-synth:
     machine:
-      image: ubuntu-2204:2022.10.2
+      image: ubuntu-2404:2024.05.1
     environment:
       AWS_ACCESS_KEY_ID: "fake"
       AWS_DEFAULT_REGION: "eu-west-2"
@@ -58,7 +57,7 @@ jobs:
       - run:
           name: Install python dependencies
           command: |
-            pyenv local $(pyenv versions --bare | grep 3.10)
+            pyenv local $(pyenv versions --bare | grep 3.12)
             python3 -m venv .venv
             . .venv/bin/activate
             pip install --upgrade pip pipenv
@@ -79,7 +78,7 @@ jobs:
             ./node_modules/.bin/cdk synth --ci
   deploy:
     machine:
-      image: ubuntu-2204:2022.10.2
+      image: ubuntu-2404:2024.05.1
     steps:
       - checkout
       - restore_cache:
@@ -88,7 +87,7 @@ jobs:
       - run:
           name: CDK Deploy
           command: |
-            pyenv local $(pyenv versions --bare | grep 3.10)
+            pyenv local $(pyenv versions --bare | grep 3.12)
             source .venv/bin/activate
             ./node_modules/.bin/cdk deploy --ci --all
 

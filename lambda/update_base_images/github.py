@@ -1,6 +1,5 @@
 import json
 import os
-from collections import OrderedDict
 
 from commitment import GitHubClient, GitHubCredentials
 from requests import HTTPError

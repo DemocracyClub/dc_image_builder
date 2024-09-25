@@ -34,9 +34,7 @@ def get_current_settings():
 
 
 def get_ami_image_data():
-    res = requests.get(
-        "https://cloud-images.ubuntu.com/locator/ec2/releasesTable"
-    )
+    res = requests.get("https://cloud-images.ubuntu.com/locator/ec2/releasesTable")
     res.raise_for_status()
     fixed_json = res.text.replace(""",\n]\n}""", "]}")
     images = []
@@ -45,9 +43,7 @@ def get_ami_image_data():
     return images
 
 
-def get_latest_image_for_version(
-    version, image_data, region="eu-west-2", arch="amd64"
-):
+def get_latest_image_for_version(version, image_data, region="eu-west-2", arch="amd64"):
     for image in image_data:
         if (
             image.version_matched(version)

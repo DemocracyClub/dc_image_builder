@@ -1,6 +1,5 @@
 import aws_cdk.aws_sns as sns
 from aws_cdk import (
-    aws_events,
     aws_events_targets,
     aws_lambda,
     aws_lambda_python,
@@ -8,7 +7,6 @@ from aws_cdk import (
 )
 from aws_cdk.aws_ssm import StringParameter
 from aws_cdk.core import Construct, Stack
-from isort.core import IMPORT_START_IDENTIFIERS
 
 
 class NewDCImageActions(Stack):
@@ -40,16 +38,14 @@ class NewDCImageActions(Stack):
             },
             timeout=core.Duration.minutes(2),
         )
-        event_lambda_target = aws_events_targets.LambdaFunction(
+        aws_events_targets.LambdaFunction(
             handler=new_dc_base_ami_actions,
         )
 
         sns.Subscription(
             self,
             "listen_for_base_images",
-            topic=sns.Topic.from_topic_arn(
-                self, topic_arn=topic_arn, id="topic_arn"
-            ),
+            topic=sns.Topic.from_topic_arn(self, topic_arn=topic_arn, id="topic_arn"),
             endpoint=new_dc_base_ami_actions.function_arn,
             protocol=sns.SubscriptionProtocol.LAMBDA,
         )

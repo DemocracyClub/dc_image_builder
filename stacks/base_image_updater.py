@@ -40,7 +40,7 @@ class DCBaseImageUpdater(Stack):
             handler=check_for_updates
         )
 
-        run_schedule = aws_events.Rule(
+        aws_events.Rule(
             self,
             "update-ami-pr-cron",
             schedule=aws_events.Schedule.rate(core.Duration.days(1)),
