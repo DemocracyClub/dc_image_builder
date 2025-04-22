@@ -1,8 +1,8 @@
 {
   "supported_ubuntu_versions": {
     "22.04": {
-      "base_ami": "ami-0fef583e486727263",
-      "recipe_version": "0.0.15",
+      "base_ami": "ami-02d2482ef27d95645",
+      "recipe_version": "0.0.16",
       "components": [
         {
           "name": "ubuntu_upgrades_22",
@@ -35,8 +35,8 @@
       ]
     },
     "24.04": {
-      "base_ami": "ami-0d85ba2efe654edaa",
-      "recipe_version": "0.0.2",
+      "base_ami": "ami-0e44ed0c2fff540d6",
+      "recipe_version": "0.0.3",
       "components": [
         {
           "name": "ubuntu_upgrades_24",
