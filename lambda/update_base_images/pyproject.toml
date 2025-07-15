@@ -1,0 +1,9 @@
+[project]
+name = "update_base_images"
+version = "0.0.0"
+requires-python = "==3.12.*"
+dependencies = [
+    "requests==2.28.1",
+    "commitment==3.0.0",
+    "semver==2.13.0",
+]
