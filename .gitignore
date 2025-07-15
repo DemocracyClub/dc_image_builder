@@ -131,3 +131,6 @@ dmypy.json
 # CDK
 cdk.out
 node_modules
+
+# Generated lambda requirements
+lambda/update_base_images/requirements.txt

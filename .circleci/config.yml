@@ -12,34 +12,32 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+      - run:
+          name: Install uv
+          command: scripts/install_uv.sh
       - run:
           name: Install python dependencies
-          command: |
-            pyenv local $(pyenv versions --bare | grep 3.12)
-            python -m venv .venv
-            . .venv/bin/activate
-            pip install --upgrade pip pipenv
-            pipenv install --deploy --dev
+          command: uv sync --all-packages --all-groups --no-python-downloads
       - run:
-          name: Check dependencies
+          name: Pre-test checks
           command: |
-            python -m venv .venv
-            . .venv/bin/activate
-            pipenv check
+            uv lock --locked
+            uv pip check
       - node/install
       - node/install-packages
       - save_cache:
           paths:
             - ./.venv
             - ./node_modules
-          key: v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "package.json" }}
-
+            - $HOME/.cache/uv
+          key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
           name: Ruff
           command: |
-            pipenv run ruff check .
-            pipenv run ruff format --check .
+            uv run ruff check .
+            uv run ruff format --check .
+
   cdk-synth:
     machine:
       image: ubuntu-2404:2024.05.1
@@ -51,17 +49,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - machine-image-v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "package.json" }}
+            - machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - aws-cli/setup:
           profile-name: default
       - run:
+          name: Install uv
+          command: scripts/install_uv.sh
+      - run:
           name: Install python dependencies
-          command: |
-            pyenv local $(pyenv versions --bare | grep 3.12)
-            python3 -m venv .venv
-            . .venv/bin/activate
-            pip install --upgrade pip pipenv
-            pipenv install --deploy --dev
+          command: uv sync --all-packages --all-groups --no-python-downloads
       - run:
           name: Install NPM dependencies
           command: |
@@ -70,26 +66,33 @@ jobs:
           paths:
             - ./.venv
             - ./node_modules
-          key: machine-image-v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "package.json" }}
+            - $HOME/.cache/uv
+          key: machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+      - run:
+          name: Build lambda requirements
+          command: ./scripts/lambda-requirements.sh
       - run:
           name: CDK Synth
-          command: |
-            source .venv/bin/activate
-            ./node_modules/.bin/cdk synth --ci
+          command: uv run ./node_modules/.bin/cdk synth --ci
+      - persist_to_workspace:
+          root: ~/project/
+          paths: [
+            cdk.out,
+            lambda/update_base_images/requirements.txt,
+          ]
   deploy:
     machine:
       image: ubuntu-2404:2024.05.1
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/project
       - restore_cache:
           keys:
-            - machine-image-v2-dependencies-{{ checksum "Pipfile.lock" }}-{{ checksum "package.json" }}
+            - machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
           name: CDK Deploy
-          command: |
-            pyenv local $(pyenv versions --bare | grep 3.12)
-            source .venv/bin/activate
-            ./node_modules/.bin/cdk deploy --ci --all
+          command: uv run ./node_modules/.bin/cdk deploy --ci --all
 
 
 workflows:
