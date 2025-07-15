@@ -12,7 +12,9 @@ from aws_cdk.core import Construct, Stack
 
 def validate_name(name):
     name = name.replace(".", "-")
-    if not re.match(r"^[-_A-Za-z-0-9][-_A-Za-z0-9 ]{1,126}[-_A-Za-z-0-9]$", name):
+    if not re.match(
+        r"^[-_A-Za-z-0-9][-_A-Za-z0-9 ]{1,126}[-_A-Za-z-0-9]$", name
+    ):
         raise ValueError(f"{name} isn't valid")
     return name
 
@@ -28,7 +30,9 @@ class DCImageBuilder(Stack):
         infra_config = self.make_infra_config()
 
         # Make the recipes and images
-        for version, image_data in settings["supported_ubuntu_versions"].items():
+        for version, image_data in settings[
+            "supported_ubuntu_versions"
+        ].items():
             recipe = self.make_recipe(version, image_data)
 
             distribution = self.make_distribution(version, image_data)
@@ -76,7 +80,9 @@ class DCImageBuilder(Stack):
         component_path = Path() / "components" / version / component.get("file")
         component_yaml = yaml.safe_load(component_path.read_text())
 
-        name = f"{component['name']}_{version}".replace(".", "-").replace(" ", "-")
+        name = f"{component['name']}_{version}".replace(".", "-").replace(
+            " ", "-"
+        )
 
         component = image_builder.CfnComponent(
             self,
@@ -157,7 +163,9 @@ class DCImageBuilder(Stack):
         return self._topic_arn
 
     def make_distribution(self, version, image_data):
-        org_id = StringParameter.value_for_string_parameter(self, "OrganisationID")
+        org_id = StringParameter.value_for_string_parameter(
+            self, "OrganisationID"
+        )
         dist_name = validate_name(f"Ubuntu-{version}-distribution")
         return image_builder.CfnDistributionConfiguration(
             self,

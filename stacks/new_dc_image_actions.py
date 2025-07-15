@@ -45,7 +45,9 @@ class NewDCImageActions(Stack):
         sns.Subscription(
             self,
             "listen_for_base_images",
-            topic=sns.Topic.from_topic_arn(self, topic_arn=topic_arn, id="topic_arn"),
+            topic=sns.Topic.from_topic_arn(
+                self, topic_arn=topic_arn, id="topic_arn"
+            ),
             endpoint=new_dc_base_ami_actions.function_arn,
             protocol=sns.SubscriptionProtocol.LAMBDA,
         )
