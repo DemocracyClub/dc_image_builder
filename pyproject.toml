@@ -1,9 +1,46 @@
 
+[project]
+name = "dc_image_builder"
+version = "0.0.0"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "aws-cdk.core==1.204.0",
+    "aws-cdk.aws-imagebuilder==1.204.0",
+    "pyyaml==6.0.2",
+    "aws-cdk.aws-lambda==1.204.0",
+    "aws-cdk.aws-lambda-python==1.204.0",
+    "aws-cdk.aws-events==1.204.0",
+    "aws-cdk.aws-events-targets==1.204.0",
+    "aws-cdk.aws-sns==1.204.0",
+    "certifi==2024.8.30",
+]
 
-[tool.isort]
-profile = "black"
-line_length = "79"
+[dependency-groups]
+dev = [
+    "ipdb==0.13.9",
+    "ruff==0.6.7",
+]
 
-[tool.black]
+[tool.uv]
+required-version = "<0.6.0"
+package = false
+
+[tool.uv.workspace]
+members = ["lambda/update_base_images"]
+
+[tool.ruff]
 line-length = 80
-target-version = ['py310']
+
+[ruff.lint]
+ignore = [
+    "E501",
+    "E203", #https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#slices
+]
+extend-select = [
+    "I",
+    "C4",
+    "SIM",
+    "Q003",
+    "RET",
+]
