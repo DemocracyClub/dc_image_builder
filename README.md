@@ -19,6 +19,13 @@ There are a few aims:
    creating an application user. This wouldn't be in the base image, but 
    could be used by image builder in the application account. 
 
+## Setup
+
+Install dependencies with:
+
+```bash
+uv sync --dev
+```
 
 ## Creating and updating components
 
