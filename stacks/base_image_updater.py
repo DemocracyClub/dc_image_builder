@@ -2,11 +2,12 @@ from aws_cdk import (
     aws_events,
     aws_events_targets,
     aws_lambda,
-    aws_lambda_python,
-    core,
+    Duration,
+    Stack,
 )
+import aws_cdk.aws_lambda_python_alpha as aws_lambda_python
 from aws_cdk.aws_ssm import StringParameter
-from aws_cdk.core import Construct, Stack
+from constructs import Construct
 
 
 class DCBaseImageUpdater(Stack):
@@ -34,7 +35,7 @@ class DCBaseImageUpdater(Stack):
                 "GITHUB_EMAIL": GITHUB_EMAIL,
                 "GITHUB_API_KEY": GITHUB_API_KEY,
             },
-            timeout=core.Duration.minutes(1),
+            timeout=Duration.minutes(1),
         )
         event_lambda_target = aws_events_targets.LambdaFunction(
             handler=check_for_updates
@@ -43,6 +44,6 @@ class DCBaseImageUpdater(Stack):
         aws_events.Rule(
             self,
             "update-ami-pr-cron",
-            schedule=aws_events.Schedule.rate(core.Duration.days(1)),
+            schedule=aws_events.Schedule.rate(Duration.days(1)),
             targets=[event_lambda_target],
         )

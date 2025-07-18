@@ -2,11 +2,13 @@ import aws_cdk.aws_sns as sns
 from aws_cdk import (
     aws_events_targets,
     aws_lambda,
-    aws_lambda_python,
-    core,
+    Stack,
+    Duration,
 )
+import aws_cdk.aws_lambda_python_alpha as aws_lambda_python
+
 from aws_cdk.aws_ssm import StringParameter
-from aws_cdk.core import Construct, Stack
+from constructs import Construct
 
 
 class NewDCImageActions(Stack):
@@ -36,7 +38,7 @@ class NewDCImageActions(Stack):
                 "GITHUB_EMAIL": GITHUB_EMAIL,
                 "GITHUB_API_KEY": GITHUB_API_KEY,
             },
-            timeout=core.Duration.minutes(2),
+            timeout=Duration.minutes(2),
         )
         aws_events_targets.LambdaFunction(
             handler=new_dc_base_ami_actions,
