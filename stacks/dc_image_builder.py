@@ -7,7 +7,8 @@ import aws_cdk.aws_imagebuilder as image_builder
 import aws_cdk.aws_sns as sns
 import yaml
 from aws_cdk.aws_ssm import StringParameter
-from aws_cdk.core import Construct, Stack
+from aws_cdk import Stack
+from constructs import Construct
 
 
 def validate_name(name):
