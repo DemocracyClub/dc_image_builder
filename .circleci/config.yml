@@ -91,6 +91,9 @@ jobs:
           keys:
             - machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
+          name: Install uv
+          command: scripts/install_uv.sh
+      - run:
           name: CDK Deploy
           command: uv run ./node_modules/.bin/cdk deploy --ci --all
 
