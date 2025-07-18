@@ -32,7 +32,7 @@ class NewDCImageActions(Stack):
             "new_dc_base_ami_actions",
             function_name="new_dc_base_ami_actions",
             entry="./lambda/new_dc_base_ami_actions/",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             environment={
                 "GITHUB_USERNAME": GITHUB_USERNAME,
                 "GITHUB_EMAIL": GITHUB_EMAIL,

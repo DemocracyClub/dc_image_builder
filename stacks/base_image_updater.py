@@ -29,7 +29,7 @@ class DCBaseImageUpdater(Stack):
             "check_for_updates",
             function_name="check_for_updates",
             entry="./lambda/update_base_images/",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             environment={
                 "GITHUB_USERNAME": GITHUB_USERNAME,
                 "GITHUB_EMAIL": GITHUB_EMAIL,
