@@ -1,7 +1,7 @@
 name: InstallAptPackages
 description: Apt install core packages
 schemaVersion: 1.0
-component_version: 0.0.3
+component_version: 0.0.4
 
 phases:
   - name: build
