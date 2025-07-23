@@ -10,4 +10,4 @@ phases:
         action: ExecuteBash
         inputs:
           commands:
-            - sudo apt install -y binutils build-essential curl git unzip
+            - sudo apt install -y binutils build-essential curl ec2-instance-connect gettext git jq libpq-dev nodejs npm postgresql-client postgresql-common python3-dev unzip
