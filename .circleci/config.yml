@@ -12,7 +12,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+            - v3-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
           name: Install uv
           command: scripts/install_uv.sh
@@ -28,10 +28,9 @@ jobs:
       - node/install-packages
       - save_cache:
           paths:
-            - ./.venv
             - ./node_modules
             - $HOME/.cache/uv
-          key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+          key: v3-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
           name: Ruff
           command: |
@@ -49,7 +48,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+            - machine-image-v3-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - aws-cli/setup:
           profile-name: default
       - run:
@@ -64,10 +63,9 @@ jobs:
             npm install
       - save_cache:
           paths:
-            - ./.venv
             - ./node_modules
             - $HOME/.cache/uv
-          key: machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+          key: machine-image-v3-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
           name: Build lambda requirements
           command: ./scripts/lambda-requirements.sh
@@ -89,7 +87,7 @@ jobs:
           at: ~/project
       - restore_cache:
           keys:
-            - machine-image-v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
+            - machine-image-v3-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package.json" }}
       - run:
           name: Install uv
           command: scripts/install_uv.sh
