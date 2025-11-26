@@ -35,7 +35,7 @@
       ]
     },
     "24.04": {
-      "base_ami": "ami-02ca97ddc0a0557bb",
+      "base_ami": "ami-0838acf0030c73b79",
       "recipe_version": "0.0.6",
       "components": [
         {
