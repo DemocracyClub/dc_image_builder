@@ -8,7 +8,7 @@ from requests import HTTPError
 def open_pull_request(version, new_settings):
     branch = f"update-ami-{version}"
     version_settings = new_settings["supported_ubuntu_versions"][version]
-    commit_message = f'Update ubuntu_ami_id to {version_settings["base_ami"]}'
+    commit_message = f"Update ubuntu_ami_id to {version_settings['base_ami']}"
 
     creds = GitHubCredentials(
         repo="DemocracyClub/dc_image_builder",
@@ -36,7 +36,7 @@ def open_pull_request(version, new_settings):
         )
     except HTTPError:
         pass
-    body = f'Found new Ubuntu {version} ({version_settings["base_ami"]})'
+    body = f"Found new Ubuntu {version} ({version_settings['base_ami']})"
     try:
         g.open_pull_request(
             head_branch=branch,
