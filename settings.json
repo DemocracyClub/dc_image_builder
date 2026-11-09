@@ -35,8 +35,8 @@
       ]
     },
     "24.04": {
-      "base_ami": "ami-046c2381f11878233",
-      "recipe_version": "0.0.6",
+      "base_ami": "ami-057b46c043e81dcf4",
+      "recipe_version": "0.0.7",
       "components": [
         {
           "name": "ubuntu_upgrades_24",
